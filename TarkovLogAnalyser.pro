@@ -9,15 +9,15 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    logdata.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    tarkovloganalyser.cpp
+    src/logdata.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/tarkovloganalyser.cpp \
 
 HEADERS += \
-    logdata.h \
-    mainwindow.h \
-    tarkovloganalyser.h
+    include/logdata.h \
+    include/mainwindow.h \
+    include/tarkovloganalyser.h \
 
 FORMS += \
     mainwindow.ui
@@ -26,3 +26,8 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    .gitignore \
+    build/.qmake.stash \
+    build/release/TarkovLogAnalyser.exe
