@@ -9,11 +9,11 @@ class TarkovLogAnalyser
 {
 public:
     TarkovLogAnalyser();
-    QString analyse_log(QString logpath);
+    QVector<LogData> analyse_log(QString logpath);
 
 private:
     QNetworkAccessManager *_manager;
-    static const int LOG_COUNT = 20;
+    static const int LOG_COUNT = 44; // maximum allowed requests per minute
 };
 
 #endif // TARKOVLOGANALYSER_H

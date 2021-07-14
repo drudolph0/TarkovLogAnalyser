@@ -26,5 +26,7 @@ private slots:
 private:
     Ui::MainWindow *_ui;
     TarkovLogAnalyser _log_analyser;
+
+    void resetLogTable();
 };
 #endif // MAINWINDOW_H

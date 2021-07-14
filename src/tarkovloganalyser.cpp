@@ -8,15 +8,15 @@ TarkovLogAnalyser::TarkovLogAnalyser()
     _manager = new QNetworkAccessManager();
 }
 
-QString TarkovLogAnalyser::analyse_log(QString logpath) {
+QVector<LogData> TarkovLogAnalyser::analyse_log(QString logpath) {
     QVector<LogData> logs;
     QDir dir(logpath);
-    for(int i = dir.entryInfoList().size(); i > 0; --i)
+    for(int i=dir.entryInfoList().size(); i > 0; --i)
     {
-        auto last = dir.entryInfoList().at(i - 1);
-        QFile trace(last.filePath() + QString("/" + last.fileName().remove(0, 4) + " traces.log"));
+        auto curent = dir.entryInfoList().at(i - 1);
+        QFile trace(curent.filePath() + QString("/" + curent.fileName().remove(0, 4) + " traces.log"));
         if(!trace.exists())
-            return QString("no valid Logs.");
+            continue;
 
         if (trace.open(QIODevice::ReadOnly))
         {
@@ -29,6 +29,7 @@ QString TarkovLogAnalyser::analyse_log(QString logpath) {
                     auto split = line.split(",");
                     auto info = split[0].split("|")[0].trimmed();
                     auto ip = split[2].split(":")[1].trimmed();
+                    auto port = split[3].split(":")[1].trimmed();
                     auto location = split[4].split(":")[1].trimmed();
 
                     QUrl url("http://ip-api.com/json/" + ip);
@@ -42,22 +43,18 @@ QString TarkovLogAnalyser::analyse_log(QString logpath) {
                     auto city = json["city"].toString();
                     auto country = json["country"].toString();
 
-                    LogData log(info, ip, city, country, location);
+                    LogData log(info, ip, port, city, country, location);
                     logs.append(log);
                     reply->deleteLater();
                 }
             }
             trace.close();
         }
-        if(logs.size() > LOG_COUNT)
+        if(logs.size() > 45)
             break;
     }
-    QString out;
 
-    for(auto log : logs)
-    {
-        out += log.toQString() + "\n";
-    }
+    std::sort(logs.begin(), logs.end(), std::greater<LogData>());
 
-    return out;
+    return logs;
 }

@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
     , _ui(new Ui::MainWindow)
 {
     _ui->setupUi(this);
+    setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+    resetLogTable();
     _log_analyser = TarkovLogAnalyser();
 }
 
@@ -25,12 +27,34 @@ void MainWindow::on_logPathButton_clicked()
 void MainWindow::on_updateButton_clicked()
 {
     QString logPath = _ui->logPathField->toPlainText();
+    _ui->logTableWidget->clearContents();
     if(logPath == "") {
-        _ui->logView->setText("Log Path is empty.");
         return;
     }
 
-    _ui->logView->setText("update");
-    _ui->logView->setText(_log_analyser.analyse_log(logPath));
+    _ui->logTableWidget->setItem(0, 0, new QTableWidgetItem("Updating...."));
+
+    auto logs = _log_analyser.analyse_log(logPath);
+    _ui->logTableWidget->setRowCount(logs.size());
+    for(int i = 0; i < logs.size(); ++i)
+    {
+        const auto& log = logs[i];
+        _ui->logTableWidget->setItem(i, 0, new QTableWidgetItem(log.getTime()));
+        _ui->logTableWidget->setItem(i, 1, new QTableWidgetItem(log.getIp()));
+        _ui->logTableWidget->setItem(i, 2, new QTableWidgetItem(log.getPort()));
+        _ui->logTableWidget->setItem(i, 3, new QTableWidgetItem(log.getCity()));
+        _ui->logTableWidget->setItem(i, 4, new QTableWidgetItem(log.getCountry()));
+        _ui->logTableWidget->setItem(i, 5, new QTableWidgetItem(log.getLocation()));
+    }
+}
+
+void MainWindow::resetLogTable()
+{
+    QStringList header;
+    header<< "Time" << "Ip" << "Port" << "City" << "Country" << "Map";
+    _ui->logTableWidget->clearContents();
+    _ui->logTableWidget->setHorizontalHeaderLabels(header);
+    _ui->logTableWidget->setShowGrid(true);
+    _ui->logTableWidget->setColumnWidth(0, 200);
 }
 
