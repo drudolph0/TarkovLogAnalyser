@@ -16,6 +16,9 @@ public:
     QString getCountry() const { return _country; }
     QString getLocation() const { return _location; }
 
+    void setCity(QString city) { _city = city; }
+    void setCountry(QString country) { _country = country; }
+
     bool operator<(const LogData &logData) const
     {
         return(this->_time < logData.getTime());

@@ -13,7 +13,7 @@ public:
 
 private:
     QNetworkAccessManager *_manager;
-    static const int LOG_COUNT = 44; // maximum allowed requests per minute
+    static const int LOG_COUNT = 40;
 };
 
 #endif // TARKOVLOGANALYSER_H

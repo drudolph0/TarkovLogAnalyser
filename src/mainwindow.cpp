@@ -55,6 +55,8 @@ void MainWindow::resetLogTable()
     _ui->logTableWidget->clearContents();
     _ui->logTableWidget->setHorizontalHeaderLabels(header);
     _ui->logTableWidget->setShowGrid(true);
-    _ui->logTableWidget->setColumnWidth(0, 200);
+    _ui->logTableWidget->setColumnWidth(0, 150);
+    _ui->logTableWidget->setColumnWidth(2, 70);
+
 }
 
